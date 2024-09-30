@@ -16,7 +16,7 @@ int main() {
 
 	#ifndef NO_LOGGING
 	rootCoordinator.setLogger<STDOUTLogger>(";");
-	// rootCoordinator.setLogger<CSVLogger>("trafficLightLog.csv", ";");
+	// rootCoordinator.setLogger<CSVLogger>("outputLog.csv", ";");
 	#endif
 
 	rootCoordinator.start();
