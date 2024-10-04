@@ -37,7 +37,7 @@ You can modify this project per your requirement. Change the project name define
 ```cmake
 set(projectName "sample_project")
 ```
-If you want to add other include directories, add the CMakeLists.txt file in the `main` directory:
+If you want to add other include directories, add the following to the CMakeLists.txt file in the `main` directory:
 ```cmake
 target_include_directories(${projectName} PRIVATE "/path/to/dependency")
 ```
