@@ -16,7 +16,7 @@ source build_sim.sh
 ```
 __NOTE__: Everytime you run build_sim.sh, the contents of `build/` and `bin/` will be replaced.
 
-To build this project dor the ESP32, run:
+To build this project for the ESP32, run:
 ```sh
 source build_esp.sh
 ```
