@@ -1,11 +1,23 @@
-#include "cadmium/simulation/rt_root_coordinator.hpp"
 #include <limits>
 #include "include/top.hpp"
 
-#ifdef ESP_PLATFORM
-	#include <cadmium/simulation/rt_clock/ESPclock.hpp>
+/*
+There are 3 macros defined at compile time that changes the behaviour of the simulation.
+--> SIM_TIME: This macro, when defined, runs the simulation in simulation time. Else, the simulation runs at wall clock.
+--> ESP_PLATFORM: When defined, the models are compiled for the ESP32 microcontroller. Else, compiles for Linux/ Windows
+--> NO_LOGGING: When defined, prevents logging (maybe useful in embedded situations)
+*/
+
+
+#ifdef SIM_TIME
+	#include "cadmium/simulation/root_coordinator.hpp"
 #else
-	#include <cadmium/simulation/rt_clock/chrono.hpp>
+	#include "cadmium/simulation/rt_root_coordinator.hpp"
+	#ifdef ESP_PLATFORM
+		#include <cadmium/simulation/rt_clock/ESPclock.hpp>
+	#else
+		#include <cadmium/simulation/rt_clock/chrono.hpp>
+	#endif
 #endif
 
 #ifndef NO_LOGGING
@@ -23,19 +35,22 @@ extern "C" {
 	#endif
 	{
 	
-		std::shared_ptr<top_coupled> model = std::make_shared<top_coupled> ("top");
+		auto model = std::make_shared<top_coupled> ("top");
 		
-		#ifdef ESP_PLATFORM
-			cadmium::ESPclock clock;
-			auto rootCoordinator = cadmium::RealTimeRootCoordinator<cadmium::ESPclock<double>>(model, clock);
+		#ifdef SIM_TIME
+			auto rootCoordinator = cadmium::RootCoordinator(model);
 		#else
-			cadmium::ChronoClock clock;
-			auto rootCoordinator = cadmium::RealTimeRootCoordinator<cadmium::ChronoClock<std::chrono::steady_clock>>(model, clock);
+			#ifdef ESP_PLATFORM
+				cadmium::ESPclock clock;
+				auto rootCoordinator = cadmium::RealTimeRootCoordinator<cadmium::ESPclock<double>>(model, clock);
+			#else
+				cadmium::ChronoClock clock;
+				auto rootCoordinator = cadmium::RealTimeRootCoordinator<cadmium::ChronoClock<std::chrono::steady_clock>>(model, clock);
+			#endif
 		#endif
 
 		#ifndef NO_LOGGING
 		rootCoordinator.setLogger<STDOUTLogger>(";");
-		// rootCoordinator.setLogger<CSVLogger>("outputLog.csv", ";");
 		#endif
 
 		rootCoordinator.start();

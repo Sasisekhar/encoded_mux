@@ -12,7 +12,6 @@ if(ESP_PLATFORM)
     # target_compile_options(${COMPONENT_LIB} PRIVATE "-DNO_LOG_STATE")
     # target_compile_options(${COMPONENT_LIB} PRIVATE "-DDEBUG_DELAY")
 else()
-    message(STATUS "Configuring for non-ESP32")
 
     # Regular CMake project setup for non-ESP32
     add_executable(${projectName} main.cpp)
