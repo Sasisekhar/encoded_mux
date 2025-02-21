@@ -9,25 +9,26 @@
 
 using namespace cadmium;
 
-#define NUM_PORTS 5000
-
-using port_type = int;
+//vary these two values to test various datatypes and number of ports.
+#define NUM_PORTS 10
+using port_type = int; //When you change the datatype, remember to change rand_val() accordingly.
 
 struct top_coupled : public Coupled {
 
     /**
-     * Constructor function for the blinkySystem model.
-     * @param id ID of the blinkySystem model.
+     * Constructor function for the top model.
+     * @param id ID of the top model.
      */
     top_coupled(const std::string& id) : Coupled(id) {
 
+        //create random generators for sigma and value
         std::default_random_engine rand_generator;
         std::uniform_int_distribution<int> distribution_val(1,10);
         std::uniform_int_distribution<int> distribution_sigma(1,100);
         auto rand_val = std::bind ( distribution_val, rand_generator );
         auto rand_sigma = std::bind ( distribution_sigma, rand_generator );
 
-
+        //Atomic models that will produce outputs for the mux
         std::vector<std::shared_ptr<generator<port_type>>> testers;
 
         for(int i = 0; i < NUM_PORTS; i++) {
