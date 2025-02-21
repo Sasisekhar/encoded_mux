@@ -50,7 +50,8 @@ extern "C" {
 		#endif
 
 		#ifndef NO_LOGGING
-		rootCoordinator.setLogger<STDOUTLogger>(";");
+		// rootCoordinator.setLogger<STDOUTLogger>(";");
+		rootCoordinator.setLogger<CSVLogger>("log_output.csv", ";");
 		#endif
 
 		rootCoordinator.start();
